@@ -1,4 +1,4 @@
-# Welcome to the secret branch that will help you deploy airgapped Vault Clusterand Squid Proxy to enable per-plugin access
+# Welcome to the secret branch that will help you deploy airgapped Vault Cluster and Squid Proxy to enable per-plugin access
 
 This is a demo Terraform code **NOT** intended for production use.
 
