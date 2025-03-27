@@ -78,7 +78,7 @@ vault write vault-plugin-secrets-keymgmt/kms/example-kms/key/example-key \
     protection="hsm"
 ```
 
-## Delete the key
+## Delete the key from AWS
 
 ```bash
 vault delete vault-plugin-secrets-keymgmt/kms/example-kms/key/example-key
