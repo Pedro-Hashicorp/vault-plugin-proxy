@@ -16,8 +16,12 @@ resource "aws_lb" "vnlb" {
   }
 }
 
+data "aws_route53_zone" "selected" {
+  name = var.vault_fqdn
+}
+
 resource "aws_route53_record" "vault_addr" {
-  zone_id = var.route53_zone_id
+  zone_id = data.aws_route53_zone.selected.zone_id
   name    = var.vault_fqdn
   type    = "CNAME"
   ttl     = 30

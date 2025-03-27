@@ -15,50 +15,60 @@ After Vault is initialized change the nodes' Security Group to be *_airgapped, i
 
 ## Configure plugin
 
-During the provisioning, gcp secrets plugin is downloaded to Vault nodes.
+During the provisioning, key secrets management plugin is downloaded to Vault nodes.
 Run the following to enable it with the proxy.
 
-* `PROXY_IP` is a private IP of the SQUID instance, also can be seen in terraform output.
+* `PROXY_IP` is a private IP of the SQUID instance, also can be seen in terraform output
+
+
+First of all you need to export your AWS credentials and Vault token:
 
 ```bash
-vault plugin register -sha256=160db38375208e9bd7a3fcbc8187acd1a76c975413fdefeaa8933da44fdac1df \
-  -env HTTP_PROXY="PROXY_IP:3128" \
-  -env HTTPS_PROXY="PROXY_IP:3128" \
-  -version="0.19.0" \
-  -command=vault-plugin-secrets-gcp \
-  secret gcp-proxy
+export ACCESS_KEY="Your AWS access key"
+export SECRET_KEY="Your AWS secret key"
+export VAULT_TOKEN="Your Vault token"
+export VAULT_ADDR="Vault Address"
+```
+
+The plugin has been downloaded on the folder /opt/vault/plugins:
+
+```bash
+vault plugin register -version=0.16.0+ent secret vault-plugin-secrets-keymgmt
 ```
 
 ## Enable secret engine
 
 ```bash
-vault secrets enable gcp-proxy
+vault secrets enable vault-plugin-secrets-keymgmt
 ```
 
-## Configure it
+## Create a key
 
 ```bash
-vault write gcp-proxy/config credentials=@path_to_credentials.json
+vault write -f vault-plugin-secrets-keymgmt/key/example-key type="aes256-gcm96"
 ```
 
-## Configure roleset token
+## Create the provider connection
 
 ```bash
-vault write gcp-proxy/roleset/my-token-roleset \
-    project="<PROJECT_ID>" \
-    secret_type="access_token"  \
-    token_scopes="https://www.googleapis.com/auth/cloud-platform" \
-    bindings=-<<EOF
-      resource "//cloudresourcemanager.googleapis.com/projects/<PROJECT_ID>" {
-        roles = ["roles/viewer"]
-      }
-EOF
+vault write vault-plugin-secrets-keymgmt/kms/example-kms \
+    provider="awskms" \
+    key_collection="us-east-1" \
+    credentials=access_key=$ACCESS_KEY \
+    credentials=secret_key=$SECRET_KEY
 ```
 
-## Generate one
+## Push the key created 
 
 ```bash
-vault read gcp-proxy/roleset/my-token-roleset/token
+vault write vault-plugin-secrets-keymgmt/kms/example-kms/key/example-key \
+    purpose="encrypt,decrypt" \
+    protection="hsm"
+```
+
+## Delete the key
+```bash
+vault delete vault-plugin-secrets-keymgmt/kms/example-kms/key/example-key
 ```
 
 ### Thank [@GuyBarros](https://github.com/GuyBarros/) for making me do it

@@ -36,10 +36,13 @@ resource "aws_launch_template" "vault" {
     certificate_key       = acme_certificate.certificate.private_key_pem,
     certificate_pem       = acme_certificate.certificate.certificate_pem,
     issuer_pem            = acme_certificate.certificate.issuer_pem,
-    kms_key               = aws_kms_key.vault.id
-    asg_name              = random_pet.env.id
-    leader_tls_servername = var.vault_fqdn
-    aws_region            = var.region
+    kms_key               = aws_kms_key.vault.id,
+    asg_name              = random_pet.env.id,
+    leader_tls_servername = var.vault_fqdn,
+    aws_region            = var.region,
+    vault_service         = filebase64("${path.module}/vault.service"),
+    vault_lic              = filebase64("${path.module}/vault.hclic"),
+    aws_lb                = aws_lb.vnlb.dns_name
   }))
 }
 
