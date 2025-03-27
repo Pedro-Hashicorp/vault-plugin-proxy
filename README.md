@@ -15,7 +15,7 @@ After Vault is initialized change the nodes' Security Group to be *_airgapped, i
 
 ## Vault enterprise Version
 
-Compatible Vault Enterprise versions. See this doc for more info(https://developer.hashicorp.com/vault/docs/plugins/plugin-management)
+Compatible Vault Enterprise versions. [See this doc for more info](https://developer.hashicorp.com/vault/docs/plugins/plugin-management)
 * 1.16.16+
 * 1.17.12+
 * 1.18.5+
@@ -83,4 +83,4 @@ vault write vault-plugin-secrets-keymgmt/kms/example-kms/key/example-key \
 vault delete vault-plugin-secrets-keymgmt/kms/example-kms/key/example-key
 ```
 
-### Thank [@GuyBarros](https://github.com/GuyBarros/) @AndreiBurdi(https://github.com/burdandrei/) for making me do it
+### Thank [@GuyBarros](https://github.com/GuyBarros/) [@AndreiBurdi](https://github.com/burdandrei/) for making me do it
