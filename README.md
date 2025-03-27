@@ -13,6 +13,18 @@ It showcases the deployment of Vault cluster on AWS using:
 
 After Vault is initialized change the nodes' Security Group to be *_airgapped, it will disable all outbound communication to the internet (VPC LAN is OK)
 
+## Vault enterprise Version
+
+Compatible Vault Enterprise versions. See this doc for more info(https://developer.hashicorp.com/vault/docs/plugins/plugin-management)
+* 1.16.16+
+* 1.17.12+
+* 1.18.5+
+* 1.19.0+
+
+Before registering an enterprise plugin, ensure that the plugin artifact compatible with the system that runs Vault Enterprise is downloaded from HashiCorp releases page and placed in the plugin directory.
+
+Note: Enterprise plugins artifacts should not be unzipped or modified in any way. Vault Enterprise will verify the plugin's integrity and compatibility and unzip during the registration process.
+
 ## Configure plugin
 
 During the provisioning, key secrets management plugin is downloaded to Vault nodes.
