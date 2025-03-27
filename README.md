@@ -71,4 +71,4 @@ vault write vault-plugin-secrets-keymgmt/kms/example-kms/key/example-key \
 vault delete vault-plugin-secrets-keymgmt/kms/example-kms/key/example-key
 ```
 
-### Thank [@GuyBarros](https://github.com/GuyBarros/) for making me do it
+### Thank [@GuyBarros](https://github.com/GuyBarros/) @AndreiBurdi(https://github.com/burdandrei/) for making me do it

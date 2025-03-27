@@ -40,8 +40,8 @@ resource "aws_launch_template" "vault" {
     asg_name              = random_pet.env.id,
     leader_tls_servername = var.vault_fqdn,
     aws_region            = var.region,
-    vault_service         = filebase64("${path.module}/vault.service"),
-    vault_lic              = filebase64("${path.module}/vault.hclic"),
+    vault_service         = filebase64("${path.module}/utils/vault.service"),
+    vault_lic              = filebase64("${path.module}/utils/vault.hclic"),
     aws_lb                = aws_lb.vnlb.dns_name
   }))
 }
@@ -100,4 +100,22 @@ resource "aws_iam_role_policy" "vault-kms-unseal" {
 resource "aws_iam_instance_profile" "vault-kms-unseal" {
   name = "vault-kms-unseal-${random_pet.env.id}"
   role = aws_iam_role.vault-kms-unseal.name
+}
+
+
+##Squid instance
+resource "aws_instance" "squid" {
+  ami                         = data.aws_ami.ubuntu.id
+  instance_type               = "t3.micro"
+  key_name                    = var.key_name
+  associate_public_ip_address = true
+  subnet_id                   = module.vpc.public_subnets[1]
+  vpc_security_group_ids      = [aws_security_group.proxy_allow_all.id]
+  user_data = base64encode(templatefile("utils/squid.userdata.sh", {
+    vpc_cidr = var.cidr
+  }))
+
+  tags = {
+    Name = "${random_pet.env.id}-proxy"
+  }
 }
