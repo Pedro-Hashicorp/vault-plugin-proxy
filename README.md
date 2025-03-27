@@ -79,6 +79,7 @@ vault write vault-plugin-secrets-keymgmt/kms/example-kms/key/example-key \
 ```
 
 ## Delete the key
+
 ```bash
 vault delete vault-plugin-secrets-keymgmt/kms/example-kms/key/example-key
 ```
